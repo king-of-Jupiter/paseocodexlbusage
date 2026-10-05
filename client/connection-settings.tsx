@@ -34,7 +34,7 @@ function ConnectionForm({
   const [url, setUrl] = useState(settings.values.endpointUrl);
   const [token, setToken] = useState(settings.values.bearerToken);
 
-  const urlError = url.trim() && !isHttpUrl(url) ? "Введите абсолютный http(s) URL" : null;
+  const urlError = url.trim() && !isHttpUrl(url) ? "Enter an absolute http(s) URL" : null;
   const dirty =
     url !== settings.values.endpointUrl || token !== settings.values.bearerToken;
 
@@ -53,11 +53,11 @@ function ConnectionForm({
   }
 
   return (
-    <SettingsSection title="Источник usage">
+    <SettingsSection title="Usage source">
       <SettingsCard>
         <SettingsInput
           label="Endpoint URL"
-          hint="GET, возвращает JSON с limits[] (5h / 7d)"
+          hint="GET, returns JSON with limits[] (5h / 7d)"
           placeholder="https://example.com/api/usage"
           initialValue={url}
           onChangeText={setUrl}
@@ -65,33 +65,33 @@ function ConnectionForm({
           error={urlError}
         />
         <SettingsInput
-          label="Bearer токен"
-          hint="Отправляется как Authorization: Bearer ..."
-          placeholder="вставьте токен"
+          label="Bearer token"
+          hint="Sent as Authorization: Bearer ..."
+          placeholder="paste token"
           initialValue={token}
           onChangeText={setToken}
           disabled={settings.saving}
           secureTextEntry
         />
         <SettingsAction
-          label="Подключение"
-          hint="Сохраняет URL и токен на этом хосте"
-          actionLabel={settings.saving ? "Сохранение…" : "Сохранить"}
+          label="Connection"
+          hint="Saves the URL and token on this host"
+          actionLabel={settings.saving ? "Saving…" : "Save"}
           disabled={settings.saving || !!urlError}
           onPress={save}
         />
         {dirty ? (
           <SettingsAction
-            label="Несохранённые изменения"
-            actionLabel="Отменить"
+            label="Unsaved changes"
+            actionLabel="Discard"
             disabled={settings.saving}
             onPress={discard}
           />
         ) : null}
         <SettingsAction
-          label="Значения по умолчанию"
-          hint="Очищает URL и токен, карточка пропадёт из Использования"
-          actionLabel="Сбросить"
+          label="Defaults"
+          hint="Clears the URL and token; the card disappears from Usage"
+          actionLabel="Reset"
           disabled={settings.saving}
           onPress={() => settings.reset()}
         />
@@ -102,8 +102,8 @@ function ConnectionForm({
         </Text>
       ) : null}
       <Text style={hintColor}>
-        После сохранения откройте «Использование» и нажмите Refresh. Должны появиться окна 5h и
-        7d. Пустые URL и токен отключают источник.
+        After saving, open Usage and press Refresh. The 5h and 7d windows should appear. Empty
+        URL and token disable the source.
       </Text>
     </SettingsSection>
   );
@@ -120,18 +120,18 @@ export function ConnectionSettings({ theme }: PluginSurfaceProps) {
   );
 
   if (settings.status === "loading") {
-    return <Text style={styles.text}>Загрузка настроек…</Text>;
+    return <Text style={styles.text}>Loading settings…</Text>;
   }
 
   if (settings.status !== "ready") {
     return (
-      <SettingsSection title="Источник usage">
+      <SettingsSection title="Usage source">
         <Text style={styles.text}>{settings.error}</Text>
-        <SettingsAction label="Повторить" actionLabel="Обновить" onPress={settings.reload} />
+        <SettingsAction label="Retry" actionLabel="Reload" onPress={settings.reload} />
         {settings.status === "invalid" ? (
           <SettingsAction
-            label="Восстановить пустые значения"
-            actionLabel="Сбросить"
+            label="Restore empty values"
+            actionLabel="Reset"
             onPress={settings.reset}
           />
         ) : null}

@@ -10,9 +10,9 @@ export default function contribute(client: PluginClientContext) {
   });
   client.addCommandCenterItem({
     id: "open-connection",
-    title: "Настроить CodexLB",
+    title: "Configure CodexLB",
     icon: "Settings",
-    keywords: ["usage", "лимит", "токен", "codexlb"],
+    keywords: ["usage", "limit", "token", "codexlb"],
     context: "global",
     onSelect({ openSettings }) {
       openSettings("connection");
