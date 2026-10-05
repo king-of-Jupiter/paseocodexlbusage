@@ -1,0 +1,7 @@
+{
+  "id": "paseocodexlbusage",
+  "description": "Custom usage source: 5h and 7d limits from a URL with Bearer auth",
+  "requirements": {
+    "paseo": ">=0.11.0"
+  }
+}
