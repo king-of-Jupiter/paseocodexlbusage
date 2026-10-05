@@ -3,8 +3,6 @@ import {
   usedPctOf,
   windowFromReportedDuration,
   windowFromUsedPct,
-  type UsageBalance,
-  type UsageDetail,
   type UsageReport,
   type UsageWindow,
 } from "@getpaseo/plugin/server/usage";
@@ -126,14 +124,6 @@ function limitToWindow(limit: CustomLimit): UsageWindow {
   });
 }
 
-function formatInt(value: number): string {
-  try {
-    return value.toLocaleString("en-US");
-  } catch {
-    return String(value);
-  }
-}
-
 function uniqueId(candidate: string, taken: Set<string>): string {
   if (!taken.has(candidate)) return candidate;
   for (let suffix = 2; ; suffix += 1) {
@@ -162,81 +152,9 @@ export function buildReport(data: CustomUsageResponse): UsageReport {
     return id === window.id ? window : { ...window, id };
   });
 
-  const details: UsageDetail[] = [];
-  if (typeof data.request_count === "number") {
-    details.push({
-      id: "request-count",
-      label: "Requests",
-      value: formatInt(data.request_count),
-    });
-  }
-  if (typeof data.total_tokens === "number") {
-    details.push({
-      id: "total-tokens",
-      label: "Total tokens",
-      value: formatInt(data.total_tokens),
-    });
-  }
-  if (typeof data.cached_input_tokens === "number") {
-    details.push({
-      id: "cached-tokens",
-      label: "Cached input tokens",
-      value: formatInt(data.cached_input_tokens),
-    });
-  }
-  if (typeof data.total_cost_usd === "number") {
-    details.push({
-      id: "total-cost",
-      label: "Total cost",
-      value: `$${data.total_cost_usd.toFixed(2)}`,
-    });
-  }
-  if (typeof data.account_pool_usage?.primary === "number") {
-    details.push({
-      id: "pool-primary",
-      label: "Pool primary",
-      value: `${data.account_pool_usage.primary.toFixed(1)}%`,
-    });
-  }
-  if (typeof data.account_pool_usage?.secondary === "number") {
-    details.push({
-      id: "pool-secondary",
-      label: "Pool secondary",
-      value: `${data.account_pool_usage.secondary.toFixed(1)}%`,
-    });
-  }
-
-  const balances: UsageBalance[] = [];
-  if (typeof data.total_cost_usd === "number") {
-    balances.push({
-      id: "cost-usd",
-      label: "Total cost",
-      used: data.total_cost_usd,
-      unit: "usd",
-    });
-  }
-  if (typeof data.request_count === "number") {
-    balances.push({
-      id: "requests",
-      label: "Requests",
-      used: data.request_count,
-      unit: "requests",
-    });
-  }
-  if (typeof data.total_tokens === "number") {
-    balances.push({
-      id: "tokens",
-      label: "Total tokens",
-      used: data.total_tokens,
-      unit: "tokens",
-    });
-  }
-
   return {
     status: "available",
     windows,
-    ...(balances.length > 0 ? { balances } : {}),
-    ...(details.length > 0 ? { details } : {}),
   };
 }
 

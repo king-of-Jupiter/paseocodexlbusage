@@ -18,7 +18,7 @@ export default function contribute(server: PluginServerContext) {
 
   server.registerUsageSource({
     id: "custom-usage",
-    label: "Custom API",
+    label: "CodexLB",
     icon: "icon.svg",
     input: inputSchema,
     discover: async (scope) => {
@@ -29,7 +29,7 @@ export default function contribute(server: PluginServerContext) {
       return [
         {
           key: hashAccountKey(connection.endpointUrl),
-          label: "Custom",
+          label: "CodexLB",
           input: {},
         },
       ];
@@ -39,7 +39,7 @@ export default function contribute(server: PluginServerContext) {
       const connection = await readConnection();
       if (!connection) {
         throw new Error(
-          "Custom usage endpoint is not configured. Open Settings → Plugins → Custom Usage and set URL and Bearer token.",
+          "Custom usage endpoint is not configured. Open Settings → Plugins → CodexLB and set URL and Bearer token.",
         );
       }
       return fetchCustomUsage(connection.endpointUrl, connection.bearerToken);
